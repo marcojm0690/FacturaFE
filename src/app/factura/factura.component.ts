@@ -111,7 +111,7 @@ export class FacturaComponent {
 
     });
 
-    addnewproduct() {
+    agregarNuevoProducto() {
         this.invoicedetail = this.invoiceform.get("details") as FormArray;
 
         let customercode = this.invoiceform.get("customerId")?.value;
