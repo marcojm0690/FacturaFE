@@ -128,7 +128,7 @@
 <p-dialog [(visible)]="productDialog" [style]="{width: '900px'}" header="Productos" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="p-inputgroup">
-            <button type="button" pButton label="Buscar" (click)="loadProducts()"></button>
+            <button type="button" pButton label="Buscar" (click)="cargarProductos()"></button>
             <input type="text" pInputText placeholder="nombre" [(ngModel)]="productoBuscar" />
         </div>
         <p-table [value]="products" selectionMode="single" [(selection)]="selectedProduct" dataKey="code"
@@ -153,6 +153,6 @@
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
         <button pButton pRipple label="Save" [disabled]="!selectedProduct" icon="pi pi-check" class="p-button-text"
-            (click)="saveProduct()"></button>
+            (click)="guardarProducto()"></button>
     </ng-template>
 </p-dialog>

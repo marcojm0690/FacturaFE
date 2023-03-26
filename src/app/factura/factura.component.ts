@@ -35,16 +35,8 @@ export class FacturaComponent {
         private builder: FormBuilder,
         private messageService: MessageService,
         private confirmationService: ConfirmationService) {
-
-
     }
     ngOnInit(): void {
-
-
-
-    }
-    confirmNumFactura() {
-
     }
     Confirmar(index: number) {
         this.invoicedetail = this.invoiceform.get("details") as FormArray;
@@ -70,15 +62,13 @@ export class FacturaComponent {
     crearFactura() {
         this.facturaService.CreaFactura(this.numeroFactura, this.selectedDate.toLocaleString()).subscribe({
             next: (result: any) => {
-                debugger;
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: result.ALERTA, life: 3000 });
                 this.isCreated = true;
                 console.log(result);
             },
             error: (error: any) => {
-                debugger;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-
+                this.isCreated = false;
                 console.log(error);
             },
         });
@@ -86,14 +76,14 @@ export class FacturaComponent {
     hideDialog() {
         this.productDialog = false;
     }
-    saveProduct() {
+    guardarProducto() {
         this.productDialog = false;
-        debugger;
         this.invoicedetail.push(this.GenerarFila());
         this.CalculoItem(this.invoicedetail.controls.length - 1);
 
     }
-    loadProducts() {
+    cargarProductos() {
+        this.selectedProduct = new Productos();
         //this.selectedProduct = new Productos() ;
         this.facturaService.BuscarProducto(this.productoBuscar).subscribe({
             next: (result: any) => {
