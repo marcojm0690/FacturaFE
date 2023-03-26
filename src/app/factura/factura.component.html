@@ -1,0 +1,158 @@
+<p-toast></p-toast>
+<div class="card-header">
+
+</div>
+<form class="container" [formGroup]="invoiceform">
+    <div class="card" style="width: 1200px">
+        <h3>FACTURA BRITT</h3>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Factura No.</label>
+                        <span class="text-danger">*</span>
+                        <input pInputText [(ngModel)]="numeroFactura" [pKeyFilter]="'int'" formControlName="invoiceNo"
+                            class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <span class="text-danger">*</span>
+                        <br />
+                        <p-calendar [showTime]="true" [(ngModel)]="selectedDate" [showIcon]="true"
+                            formControlName="date" inputId="date" [required]="true"></p-calendar>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <br />
+                        <p-button [disabled]="selectedDate == undefined  ||  numeroFactura<=0 "
+                            (click)="crearFactura()">Nueva
+                            Factura [+]</p-button>
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div *ngIf="numeroFactura> 0 && isCreated">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-bordered" formArrayName="details">
+
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <td>Linea</td>
+                                    <td style="width: 10%">Código</td>
+                                    <td style="width: 30%">Descripción</td>
+                                    <td style="width: 10%">Cant.</td>
+                                    <td style="width: 10%">Precio</td>
+                                    <td>Total</td>
+                                    <td>Acción</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of invproducts.controls;let i=index" [formGroupName]="i">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <input readonly class="form-control" formControlName="productCode" />
+                                    </td>
+                                    <td>
+                                        <input readonly class="form-control" (change)="CalculoItem(i)"
+                                            formControlName="productName" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control" (change)="CalculoItem(i)" formControlName="qty" />
+                                    </td>
+                                    <td>
+                                        <input readonly class="form-control" formControlName="salesPrice" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control" formControlName="total" />
+                                    </td>
+                                    <td>
+                                        <p-button class="p-button-success" (click)="Confirmar(i)"
+                                            icon="pi pi-check"></p-button>
+                                        <p-button styleClass="p-button-danger" (click)="EliminarProducto(i)"
+                                            icon="pi pi-delete-left"></p-button>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <a (click)="addnewproduct()" class="btn btn-success">[+]</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Total</label>
+                            <input formControlName="total" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Impuesto</label>
+                            <input formControlName="tax" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Total neto</label>
+                            <input formControlName="netTotal" class="form-control">
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+<p-dialog [(visible)]="productDialog" [style]="{width: '900px'}" header="Productos" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-inputgroup">
+            <button type="button" pButton label="Buscar" (click)="loadProducts()"></button>
+            <input type="text" pInputText placeholder="nombre" [(ngModel)]="productoBuscar" />
+        </div>
+        <p-table [value]="products" selectionMode="single" [(selection)]="selectedProduct" dataKey="code"
+            [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Precio</th>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr [pSelectableRow]="product">
+                    <td>{{product.PRECIO}}</td>
+                    <td>{{product.CODIGO_ARTICULO}}</td>
+                    <td>{{product.DESCRIPCION}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" [disabled]="!selectedProduct" icon="pi pi-check" class="p-button-text"
+            (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
